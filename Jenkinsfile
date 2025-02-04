@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main' url: 'https://github.com/ReyaneBaiju/littleproject.git'
+                git branch: 'main', url: 'https://github.com/ReyaneBaiju/littleproject.git'
             }
         }
         stage('Build Docker Image') {
