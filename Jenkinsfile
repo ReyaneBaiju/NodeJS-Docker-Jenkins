@@ -17,15 +17,21 @@ pipeline {
         }
         stage('Push to Docker Hub') {
             steps {
-                sh 'docker push reyanebaiju/littleproject:latest'
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                        sh 'docker push $DOCKER_IMAGE'
+                    }
+                }
             }
-                
-            }
-        
+        }
         stage('Deploy to AKS') {
             steps {
-                sh 'kubectl apply -f k8s-deployment.yaml'
+                script {
+                    sh 'kubectl apply -f k8s-deployment.yaml'
+                    sh 'kubectl rollout status deployment/littleproject'
+                }
             }
         }
     }
-}  // <-- Missing closing curly bracket added here
+}
