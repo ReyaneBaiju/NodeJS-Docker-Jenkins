@@ -25,13 +25,5 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to AKS') {
-            steps {
-                script {
-                    sh 'kubectl apply -f k8s-deployment.yaml'
-                    sh 'kubectl rollout status deployment/littleproject'
-                }
-            }
-        }
     }
 }
